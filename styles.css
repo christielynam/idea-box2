@@ -49,6 +49,16 @@ header {
   border: none;
   background-color: #00A79D;
   color: #FFFFFF;
+  cursor: pointer;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.save-btn:hover {
+  border: none;
+  background-color: #045E55;
+  color: #FFFFFF;
+  cursor: pointer;
   font-size: 18px;
   letter-spacing: 1px;
 }
