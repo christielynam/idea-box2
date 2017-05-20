@@ -55,12 +55,7 @@ header {
 }
 
 .save-btn:hover {
-  border: none;
   background-color: #045E55;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-size: 18px;
-  letter-spacing: 1px;
 }
 
 main {
@@ -109,11 +104,7 @@ h2 {
 }
 
 .delete-icon:hover {
-  height: 25px;
-  width: 25px;
   background-image: url('assets/delete-hover.svg');
-  background-repeat: no-repeat;
-  cursor: pointer;
 }
 
 .card-body {
@@ -142,11 +133,7 @@ h2 {
 }
 
 .upvote:hover {
-  height: 25px;
-  width: 25px;
   background-image: url('assets/upvote-hover.svg');
-  background-repeat: no-repeat;
-  cursor: pointer;
 }
 
 .downvote {
@@ -158,11 +145,7 @@ h2 {
 }
 
 .downvote:hover {
-  height: 25px;
-  width: 25px;
   background-image: url('assets/downvote-hover.svg');
-  background-repeat: no-repeat;
-  cursor: pointer;
 }
 
 #quality {
