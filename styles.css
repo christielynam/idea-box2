@@ -95,6 +95,15 @@ h2 {
   width: 25px;
   background-image: url('assets/delete.svg');
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.delete-icon:hover {
+  height: 25px;
+  width: 25px;
+  background-image: url('assets/delete-hover.svg');
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .card-body {
@@ -119,6 +128,15 @@ h2 {
   width: 25px;
   background-image: url('assets/upvote.svg');
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.upvote:hover {
+  height: 25px;
+  width: 25px;
+  background-image: url('assets/upvote-hover.svg');
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .downvote {
@@ -126,6 +144,15 @@ h2 {
   width: 25px;
   background-image: url('assets/downvote.svg');
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.downvote:hover {
+  height: 25px;
+  width: 25px;
+  background-image: url('assets/downvote-hover.svg');
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 #quality {
