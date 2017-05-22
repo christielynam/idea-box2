@@ -52,6 +52,7 @@ header {
   cursor: pointer;
   font-size: 18px;
   letter-spacing: 1px;
+  outline: none;
 }
 
 .save-btn:hover {
@@ -119,7 +120,7 @@ h2 {
 }
 
 .vote-btn-container {
-  width: 10%;
+  width: 7%;
   display: flex;
   justify-content: space-between;
 }
@@ -159,4 +160,43 @@ h2 {
 .quality-vote {
   color: #6D6E71;
   font-size: 18px;
+}
+
+@media screen and (max-width: 1600px) {
+  .vote-btn-container {
+    width: 10%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .vote-btn-container {
+    width: 15%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .vote-btn-container {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .form-container {
+    width: 80%;
+  }
+  .search-input {
+    width: 80%;
+  }
+  .card-container {
+    width: 80%;
+  }
+  .vote-btn-container {
+    width: 15%;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .vote-btn-container {
+    width: 22%;
+  }
 }
