@@ -1,6 +1,11 @@
+var ideaList = $('.card-container');
+var myIdeas = [];
+
+
 // Page load
 
-$(window) .on('load', function() {
+$(window).on('load', function() {
+  retrieveLocalStorage();
   clearInputs();
 })
 
@@ -8,44 +13,87 @@ $(window) .on('load', function() {
 
 $('.save-btn').on('click', function(event) {
   event.preventDefault();
-  var $id = Date.now();
-  var $title = $('.title-input').val();
-  var $body = $('.body-inut').val();
-  var $newIdea = new Idea($id, $title, $body);
-  prependIdea($newIdea);
+  console.log('array before adding:', myIdeas);
+  var id = Date.now();
+  var title = $('.title-input').val();
+  var body = $('.body-input').val();
+  var newIdea = new Idea(id, title, body);
+  prependIdea(newIdea);
+  myIdeas.push(newIdea);
+  console.log('array after adding: ', myIdeas);
+
+  updateLocalStorage();
+
   clearInputs();
 })
 
 // Delete button event listener
 
 $('.card-container').on('click', '.delete-icon', function() {
+  var id = $(this).closest('article')[0].id;
+  myIdeas.forEach(function(idea, index) {
+    if (id == idea.id) {
+      myIdeas.splice(index, 1);
+    }
+  })
+  updateLocalStorage();
   $(this).parents('.idea-card').remove();
   $('.title-input').focus();
 })
 
+
+
 // Upvote event listener
 
 $('.card-container').on('click', '.upvote', function() {
-  var $qualityVote = $(this).parents().find('.quality-vote');
-  console.log(this);
-  console.log($qualityVote);
-  if ($qualityVote.text() === 'swill') {
-    $qualityVote.text('plausible')
-  } else if ($qualityVote.text() === 'plausible') {
-    $qualityVote.text('genius')
+  var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
+  var id = $(this).closest('article')[0].id;
+  storeUpQuality(id, qualityVote.text())
+  if (qualityVote.text() === 'swill') {
+    qualityVote.text('plausible')
+  } else if (qualityVote.text() === 'plausible') {
+    qualityVote.text('genius')
   }
 })
 
 // Downvote event listener
 
 $('.card-container').on('click', '.downvote', function() {
-  var $qualityVote = $(this).parents().find('.quality-vote');
-  if ($qualityVote.text() === 'genius') {
-    $qualityVote.text('plausible')
-  } else if ($qualityVote.text() === 'plausible') {
-    $qualityVote.text('swill')
+  var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
+  var id = $(this).closest('article')[0].id;
+  storeDownQuality(id, qualityVote.text())
+  if (qualityVote.text() === 'genius') {
+    qualityVote.text('plausible')
+  } else if (qualityVote.text() === 'plausible') {
+    qualityVote.text('swill')
   }
 })
+
+function storeUpQuality(id, quality) {
+  myIdeas.forEach(function(idea, index) {
+    if (idea.id == id) {
+      if (idea.quality === 'swill') {
+        idea.quality = 'plausible'
+      } else if (idea.quality === 'plausible') {
+          idea.quality = 'genius'
+      }
+    }
+  })
+  updateLocalStorage();
+}
+
+function storeDownQuality(id, quality) {
+  myIdeas.forEach(function(idea, index) {
+    if (idea.id == id) {
+      if (idea.quality === 'genius') {
+        idea.quality = 'plausible'
+      } else if (idea.quality === 'plausible') {
+        idea.quality = 'swill'
+      }
+    }
+  })
+  updateLocalStorage();
+}
 
 // Idea constructor
 
@@ -56,19 +104,16 @@ function Idea(id, title, body) {
   this.quality = 'swill';
 }
 
-function prependIdea() {
-  var $id = Date.now();
-  var $title = $('.title-input').val();
-  var $body = $('.body-inut').val();
-  var $quality = 'swill';
-  var $idea = `<article class="idea-card" id=${$id}>
+function prependIdea(newIdea) {
+
+  var idea = `<article class="idea-card" id=${newIdea.id}>
     <div class="top">
-      <h2 class="card-title" contenteditable="true">${$title}</h2>
+      <h2 class="card-title" contenteditable="true">${newIdea.title}</h2>
       <div class="delete-icon">
       </div>
     </div>
     <div class="middle">
-      <p class="card-body" contenteditable="true">${$body}</p>
+      <p class="card-body" contenteditable="true">${newIdea.body}</p>
     </div>
     <div class="bottom">
       <div class="vote-btn-container">
@@ -78,10 +123,37 @@ function prependIdea() {
         </div>
       </div>
       <p id="quality">quality:</p>
-      <p class="quality-vote">${$quality}</p>
+      <p class="quality-vote">${newIdea.quality}</p>
     </div>
   </article>`;
-  $('.card-container').prepend($idea);
+
+  $('.card-container').prepend(idea);
+}
+
+// function updateIdeaArray() {
+//   for (var i = 0; i < localStorage.length; i++) {
+//     var key = localStorage.key(i);
+//     myIdeas.push(key);
+//   }
+// }
+
+function updateLocalStorage() {
+  // stringify array for local storage
+  var stringifiedArray = JSON.stringify(myIdeas);
+  // setting array to local storage
+  localStorage.setItem('ideas', stringifiedArray);
+  console.log('stringified array: ', stringifiedArray);
+}
+
+function retrieveLocalStorage() {
+  console.log('retrieve local storage: ', localStorage.getItem('ideas'));
+// setting the myIdeas array to whats in local storage or an empty array
+  myIdeas = JSON.parse(localStorage.getItem('ideas')) || [];
+  // loop thru each item of the array and prepend it to the page
+  myIdeas.forEach(function(idea) {
+    prependIdea(idea);
+    console.log('ideas from local storage: ', idea);
+  })
 }
 
 function clearInputs() {
@@ -89,12 +161,3 @@ function clearInputs() {
   $('.body-input').val('');
   $('.title-input').focus();
 }
-
-// function upvote() {
-//   var $qualityVote = $(this).parents().find('.quality-vote');
-//   if ($qualityVote.text() === 'swill') {
-//     $qualityVote.text('plausible')
-//   } else if ($qualityVote.text() === 'plausible') {
-//     $qualityVote.text('genius')
-//   }
-// }
