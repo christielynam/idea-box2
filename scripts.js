@@ -1,7 +1,6 @@
 var ideaList = $('.card-container');
 var myIdeas = [];
 
-
 // Page load
 
 $(window).on('load', function() {
@@ -9,43 +8,52 @@ $(window).on('load', function() {
   clearInputs();
 })
 
-// Save btn event listener
+// SAVE BTN event listener
 
 $('.save-btn').on('click', function(event) {
   event.preventDefault();
-  console.log('array before adding:', myIdeas);
   var id = Date.now();
   var title = $('.title-input').val();
   var body = $('.body-input').val();
   var newIdea = new Idea(id, title, body);
   prependIdea(newIdea);
   myIdeas.push(newIdea);
-  console.log('array after adding: ', myIdeas);
-
   updateLocalStorage();
-
   clearInputs();
 })
 
-// Delete button event listener
+// CARD TITLE event listener
 
-$('.card-container').on('click', '.delete-icon', function() {
+ideaList.on('keyup', '.card-title', function() {
   var id = $(this).closest('article')[0].id;
+  var title = $('.card-title').val();
+  // var title = $(this).parents('.idea-card').find('.card-title');
+  var changedTitle = title.textContent;
   myIdeas.forEach(function(idea, index) {
-    if (id == idea.id) {
-      myIdeas.splice(index, 1);
+    if (idea.id == id) {
+      title = changedTitle;
     }
   })
   updateLocalStorage();
-  $(this).parents('.idea-card').remove();
-  $('.title-input').focus();
 })
 
+// CARD BODY event listener
 
+ideaList.on('keyup', '.card-body', function() {
+  var id = $(this).closest('article')[0].id;
+  var body = $(this).parents('.idea-card').find('.card-body');
+  var changedBody = body.textContent;
+  myIdeas.forEach(function(idea, index) {
+    if (idea.id == id) {
+      body = changedBody;
+    }
+  })
+  updateLocalStorage();
+})
 
-// Upvote event listener
+// UPVOTE event listener
 
-$('.card-container').on('click', '.upvote', function() {
+ideaList.on('click', '.upvote', function() {
   var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
   var id = $(this).closest('article')[0].id;
   storeUpQuality(id, qualityVote.text())
@@ -56,9 +64,9 @@ $('.card-container').on('click', '.upvote', function() {
   }
 })
 
-// Downvote event listener
+// DOWNVOTE event listener
 
-$('.card-container').on('click', '.downvote', function() {
+ideaList.on('click', '.downvote', function() {
   var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
   var id = $(this).closest('article')[0].id;
   storeDownQuality(id, qualityVote.text())
@@ -69,31 +77,19 @@ $('.card-container').on('click', '.downvote', function() {
   }
 })
 
-function storeUpQuality(id, quality) {
-  myIdeas.forEach(function(idea, index) {
-    if (idea.id == id) {
-      if (idea.quality === 'swill') {
-        idea.quality = 'plausible'
-      } else if (idea.quality === 'plausible') {
-          idea.quality = 'genius'
-      }
-    }
-  })
-  updateLocalStorage();
-}
+// DELETE BTN event listener
 
-function storeDownQuality(id, quality) {
+ideaList.on('click', '.delete-icon', function() {
+  var id = $(this).closest('article')[0].id;
   myIdeas.forEach(function(idea, index) {
-    if (idea.id == id) {
-      if (idea.quality === 'genius') {
-        idea.quality = 'plausible'
-      } else if (idea.quality === 'plausible') {
-        idea.quality = 'swill'
-      }
+    if (id == idea.id) {
+      myIdeas.splice(index, 1);
     }
   })
   updateLocalStorage();
-}
+  $(this).parents('.idea-card').remove();
+  clearInputs();
+})
 
 // Idea constructor
 
@@ -127,33 +123,47 @@ function prependIdea(newIdea) {
     </div>
   </article>`;
 
-  $('.card-container').prepend(idea);
+  ideaList.prepend(idea);
 }
 
-// function updateIdeaArray() {
-//   for (var i = 0; i < localStorage.length; i++) {
-//     var key = localStorage.key(i);
-//     myIdeas.push(key);
-//   }
-// }
-
 function updateLocalStorage() {
-  // stringify array for local storage
   var stringifiedArray = JSON.stringify(myIdeas);
-  // setting array to local storage
   localStorage.setItem('ideas', stringifiedArray);
   console.log('stringified array: ', stringifiedArray);
 }
 
 function retrieveLocalStorage() {
-  console.log('retrieve local storage: ', localStorage.getItem('ideas'));
-// setting the myIdeas array to whats in local storage or an empty array
   myIdeas = JSON.parse(localStorage.getItem('ideas')) || [];
-  // loop thru each item of the array and prepend it to the page
   myIdeas.forEach(function(idea) {
     prependIdea(idea);
     console.log('ideas from local storage: ', idea);
   })
+}
+
+function storeUpQuality(id, quality) {
+  myIdeas.forEach(function(idea, index) {
+    if (idea.id == id) {
+      if (idea.quality === 'swill') {
+        idea.quality = 'plausible'
+      } else if (idea.quality === 'plausible') {
+        idea.quality = 'genius'
+      }
+    }
+  })
+  updateLocalStorage();
+}
+
+function storeDownQuality(id, quality) {
+  myIdeas.forEach(function(idea, index) {
+    if (idea.id == id) {
+      if (idea.quality === 'genius') {
+        idea.quality = 'plausible'
+      } else if (idea.quality === 'plausible') {
+        idea.quality = 'swill'
+      }
+    }
+  })
+  updateLocalStorage();
 }
 
 function clearInputs() {
