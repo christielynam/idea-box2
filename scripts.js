@@ -1,15 +1,10 @@
 var ideaList = $('.card-container');
 var myIdeas = [];
-// var qualityArray = ['swill', 'plausible', 'genius'];
-
-// Page load
 
 $(window).on('load', function() {
   retrieveLocalStorage();
   clearInputs();
 })
-
-// SAVE BTN event listener
 
 $('.save-btn').on('click', function(event) {
   event.preventDefault();
@@ -23,13 +18,9 @@ $('.save-btn').on('click', function(event) {
   clearInputs();
 })
 
-// SEARCH event listener
-
 $('.search-input').on('input', function() {
   searchFilter();
 })
-
-// CARD TITLE event listener
 
 ideaList.on('input keydown', '.card-title', function(event) {
   if (event.keyCode === 13) {
@@ -46,8 +37,6 @@ ideaList.on('input keydown', '.card-title', function(event) {
   updateLocalStorage();
 })
 
-// CARD BODY event listener
-
 ideaList.on('input keydown', '.card-body', function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -63,8 +52,6 @@ ideaList.on('input keydown', '.card-body', function(event) {
   updateLocalStorage();
 })
 
-// UPVOTE event listener
-
 ideaList.on('click', '.upvote', function() {
   var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
   var id = $(this).closest('.idea-card')[0].id;
@@ -76,40 +63,6 @@ ideaList.on('click', '.upvote', function() {
   }
 })
 
-ideaList.on('click', '.upvote', function() {
-  var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
-  var id = $(this).closest('.idea-card')[0].id;
-
-  var direction = 1;
-  changeQuality(direction, qualityVote);
-  // storeUpQuality(id, qualityVote.text());
-
-})
-
-function changeQuality(direction, qualityVote) {
-  console.log(qualityVote.text());
-  qualityArray.forEach(function(quality) {
-    if (qualityVote.text() === quality) {
-      qualityVote.text(qualityArray[quality + direction])
-  }
-  for (var i = 0; i < qualityArray.length; i++) {
-    console.log(qualityArray[i]);
-    if (qualityVote.text() === qualityArray[i]) {
-      qualityVote.text(qualityArray[i + direction])
-      obj.quality =
-      i = qualityArray.length;
-})
-  }
-
-  // if swill && up plausible
-  // if plausible && up genius
-  // if genius && down plausible
-  // if plausible && down swill
-
-
-
-// DOWNVOTE event listener
-
 ideaList.on('click', '.downvote', function() {
   var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
   var id = $(this).closest('.idea-card')[0].id;
@@ -120,8 +73,6 @@ ideaList.on('click', '.downvote', function() {
     qualityVote.text('swill')
   }
 })
-
-// DELETE BTN event listener
 
 ideaList.on('click', '.delete-icon', function() {
   var id = $(this).closest('.idea-card')[0].id;
@@ -136,8 +87,6 @@ ideaList.on('click', '.delete-icon', function() {
   clearInputs();
 })
 
-// Idea constructor
-
 function Idea(id, title, body) {
   this.id = id;
   this.title = title;
@@ -146,7 +95,6 @@ function Idea(id, title, body) {
 }
 
 function prependIdea(newIdea) {
-
   var idea = `<article class="idea-card" id=${newIdea.id}>
     <div class="top">
       <h2 class="card-title" contenteditable="true">${newIdea.title}</h2>
@@ -167,7 +115,6 @@ function prependIdea(newIdea) {
       <p class="quality-vote">${newIdea.quality}</p>
     </div>
   </article>`;
-
   ideaList.prepend(idea);
 }
 
