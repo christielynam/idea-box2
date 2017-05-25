@@ -76,7 +76,6 @@ ideaList.on('click', '.downvote', function() {
 
 ideaList.on('click', '.delete-icon', function() {
   var id = $(this).closest('.idea-card')[0].id;
-  console.log(id);
   myIdeas.forEach(function(idea, index) {
     if (idea.id == id) {
       myIdeas.splice(index, 1);
@@ -121,14 +120,12 @@ function prependIdea(newIdea) {
 function updateLocalStorage() {
   var stringifiedArray = JSON.stringify(myIdeas);
   localStorage.setItem('ideas', stringifiedArray);
-  console.log('stringified array: ', stringifiedArray);
 }
 
 function retrieveLocalStorage() {
   myIdeas = JSON.parse(localStorage.getItem('ideas')) || [];
   myIdeas.forEach(function(idea) {
     prependIdea(idea);
-    console.log('ideas from local storage: ', idea);
   })
 }
 
