@@ -44,6 +44,11 @@ header {
   border: 2px solid #939598;
   color: #6D6E71;
   font-size: 20px;
+  resize: none;
+}
+
+textarea {
+  padding-top: 6px;
 }
 
 .save-btn {
@@ -199,12 +204,12 @@ main {
 }
 
 @media screen and (max-width: 600px) {
-  /*header {
+  header {
     height: 350px;
   }
   .body-input {
     height: 100px;
-  }*/
+  }
   .form-container {
     width: 80%;
   }
