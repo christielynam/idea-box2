@@ -1,5 +1,6 @@
 var ideaList = $('.card-container');
 var myIdeas = [];
+// var qualityArray = ['swill', 'plausible', 'genius'];
 
 // Page load
 
@@ -22,16 +23,24 @@ $('.save-btn').on('click', function(event) {
   clearInputs();
 })
 
+// SEARCH event listener
+
+$('.search-input').on('input', function() {
+  searchFilter();
+})
+
 // CARD TITLE event listener
 
-ideaList.on('keyup', '.card-title', function() {
-  var id = $(this).closest('article')[0].id;
-  var title = $('.card-title').val();
-  // var title = $(this).parents('.idea-card').find('.card-title');
-  var changedTitle = title.textContent;
-  myIdeas.forEach(function(idea, index) {
+ideaList.on('input keydown', '.card-title', function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    this.blur();
+  }
+  var id = $(this).closest('.idea-card')[0].id;
+  var title = $(this).text();
+  myIdeas.forEach(function(idea) {
     if (idea.id == id) {
-      title = changedTitle;
+      idea.title = title;
     }
   })
   updateLocalStorage();
@@ -39,13 +48,16 @@ ideaList.on('keyup', '.card-title', function() {
 
 // CARD BODY event listener
 
-ideaList.on('keyup', '.card-body', function() {
-  var id = $(this).closest('article')[0].id;
-  var body = $(this).parents('.idea-card').find('.card-body');
-  var changedBody = body.textContent;
-  myIdeas.forEach(function(idea, index) {
+ideaList.on('input keydown', '.card-body', function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    this.blur();
+  }
+  var id = $(this).closest('.idea-card')[0].id;
+  var body = $(this).text();
+  myIdeas.forEach(function(idea) {
     if (idea.id == id) {
-      body = changedBody;
+      idea.body = body;
     }
   })
   updateLocalStorage();
@@ -55,7 +67,7 @@ ideaList.on('keyup', '.card-body', function() {
 
 ideaList.on('click', '.upvote', function() {
   var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
-  var id = $(this).closest('article')[0].id;
+  var id = $(this).closest('.idea-card')[0].id;
   storeUpQuality(id, qualityVote.text())
   if (qualityVote.text() === 'swill') {
     qualityVote.text('plausible')
@@ -64,11 +76,43 @@ ideaList.on('click', '.upvote', function() {
   }
 })
 
+ideaList.on('click', '.upvote', function() {
+  var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
+  var id = $(this).closest('.idea-card')[0].id;
+
+  var direction = 1;
+  changeQuality(direction, qualityVote);
+  // storeUpQuality(id, qualityVote.text());
+
+})
+
+function changeQuality(direction, qualityVote) {
+  console.log(qualityVote.text());
+  qualityArray.forEach(function(quality) {
+    if (qualityVote.text() === quality) {
+      qualityVote.text(qualityArray[quality + direction])
+  }
+  for (var i = 0; i < qualityArray.length; i++) {
+    console.log(qualityArray[i]);
+    if (qualityVote.text() === qualityArray[i]) {
+      qualityVote.text(qualityArray[i + direction])
+      obj.quality =
+      i = qualityArray.length;
+})
+  }
+
+  // if swill && up plausible
+  // if plausible && up genius
+  // if genius && down plausible
+  // if plausible && down swill
+
+
+
 // DOWNVOTE event listener
 
 ideaList.on('click', '.downvote', function() {
   var qualityVote = $(this).parents('.idea-card').find('.quality-vote');
-  var id = $(this).closest('article')[0].id;
+  var id = $(this).closest('.idea-card')[0].id;
   storeDownQuality(id, qualityVote.text())
   if (qualityVote.text() === 'genius') {
     qualityVote.text('plausible')
@@ -80,9 +124,10 @@ ideaList.on('click', '.downvote', function() {
 // DELETE BTN event listener
 
 ideaList.on('click', '.delete-icon', function() {
-  var id = $(this).closest('article')[0].id;
+  var id = $(this).closest('.idea-card')[0].id;
+  console.log(id);
   myIdeas.forEach(function(idea, index) {
-    if (id == idea.id) {
+    if (idea.id == id) {
       myIdeas.splice(index, 1);
     }
   })
@@ -164,6 +209,18 @@ function storeDownQuality(id, quality) {
     }
   })
   updateLocalStorage();
+}
+
+function searchFilter() {
+  var search = $('.search-input').val().toUpperCase();
+  var results = myIdeas.filter(function(idea) {
+    return idea.title.toUpperCase().includes(search) ||
+    idea.body.toUpperCase().includes(search) || idea.quality.toUpperCase().includes(search);
+  })
+  $('.card-container').empty();
+  results.forEach(function(result) {
+    prependIdea(result);
+  })
 }
 
 function clearInputs() {
