@@ -1,0 +1,2 @@
+#### IDEA-BOX ### 1705-MOD1
+Idea Box is a wonderful tool that will allow a user to keep track of all of their thoughts in one convenient place. The user can enter the title of their idea, text body and save it. Pretty genius right? RIGHT! The Idea Box will also allow you to search your ideas by just typing in a few characters. The best part of the Idea Box is all of your ideas save to the page and up to local storage, until you the user clear them out. 

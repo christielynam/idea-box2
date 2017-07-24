@@ -45,6 +45,11 @@ header {
   font-size: 20px;
 }
 
+.title-input,
+.body-input,.search-input:focus {
+  outline-color: #00A79D;
+  }
+
 .save-btn {
   border: none;
   background-color: #00A79D;
